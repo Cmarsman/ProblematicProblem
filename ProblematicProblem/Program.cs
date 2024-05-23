@@ -6,37 +6,53 @@ using System.Threading;
 
 namespace ProblematicProblem
 {
-    class Program
+    public class Program
     {
-        static bool cont = true;
-        static List<string> activities = new List<string>() { "Movies", "Paintball", "Bowling", "Lazer Tag", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
+        public static Random rng = new Random();
+        public static bool cont = true;
+        public static List<string> activities = new List<string>() { "Movies", "Paintball", "Bowling", "Lazer Tag", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
         static void Main(string[] args)
         {
-            Random rng = new Random();
+            
 
             Console.Write("Hello, welcome to the random activity generator! \nWould you like to generate a random activity? yes/no: ");
-            bool cont;
-            var contResponse = Console.ReadLine().ToLower();
+            var userResponse = Console.ReadLine();
 
-            if (contResponse == "yes") 
+            while (userResponse != "yes" && userResponse != "no") 
             {
-                cont = true;
+                Console.WriteLine("Invalid resonse. Please anser 'yes' or 'no'.");
+                userResponse = Console.ReadLine().ToLower();
             }
-            else
+            if (userResponse == "no") 
             {
-                cont = false;
+                Console.WriteLine("Goodbye");
+                return;
             }
+
             Console.WriteLine();
             Console.Write("We are going to need your information first! What is your name? ");
-            int userName = int.Parse(Console.ReadLine());
+            string userName = Console.ReadLine();
             Console.WriteLine();
             Console.Write("What is your age? ");
-            int userAge = int.Parse(Console.ReadLine());
+            var canParse = int.TryParse(Console.ReadLine(), out int userAge);
+
+            while (!canParse) 
+            {
+                Console.WriteLine("Invalid resonse. Please enter a valid age.");
+                canParse = int.TryParse(Console.ReadLine(), out userAge);
+            }
+
             Console.WriteLine();
             Console.Write("Would you like to see the current list of activities? Sure/No thanks: ");
-            bool seeList = (Console.ReadLine().ToLower() == "sure")? true : false;
+            userResponse = Console.ReadLine().ToLower();
 
-            if (seeList)
+            while (userResponse != "sure" && userResponse != "no thanks") 
+            {
+                Console.WriteLine("Invalid response. Please anser 'sure' or 'no thanks'.");
+                userResponse = Console.ReadLine().ToLower();
+            }
+                
+            if (userResponse == "sure")
             {
                 foreach (string activity in activities)
                 {
@@ -45,11 +61,17 @@ namespace ProblematicProblem
                 }
                 Console.WriteLine();
                 Console.Write("Would you like to add any activities before we generate one? yes/no: ");
-                bool addToList = (Console.ReadLine().ToLower() == "yes") ? true : false;
+                userResponse= Console.ReadLine().ToLower();
+
+                while (userResponse != "yes" && userResponse != "no") 
+                {
+                    Console.WriteLine("Invalid response. Please anser 'yes' or 'no'.");
+                    userResponse = Console.ReadLine().ToLower();    
+                }
 
                 Console.WriteLine();
 
-                while (addToList)
+                while (userResponse == "yes")
                 {
                     Console.Write("What would you like to add? ");
                     string userAddition = Console.ReadLine();
@@ -61,7 +83,13 @@ namespace ProblematicProblem
                     }
                     Console.WriteLine();
                     Console.WriteLine("Would you like to add more? yes/no: ");
-                    addToList = (Console.ReadLine().ToLower() == "yes") ? true : false;
+                    userResponse = Console.ReadLine().ToLower();
+
+                    while (userResponse != "yes" && userResponse != "no") 
+                    {
+                        Console.WriteLine("Invalid response. Please anser 'yes' or 'no'.");
+                        userResponse = Console.ReadLine().ToLower();
+                    }
                 }
             }
 
@@ -93,7 +121,18 @@ namespace ProblematicProblem
                 }
                 Console.Write($"Ah got it! {userName}, your random activity is: {randomActivity}! Is this ok or do you want to grab another activity? Keep/Redo: ");
                 Console.WriteLine();
-                cont = (Console.ReadLine().ToLower() == "redo") ? true : false;
+                userResponse = Console.ReadLine().ToLower();
+
+                while (userResponse != "keep" && userResponse != "redo")
+                {
+                    Console.WriteLine("Invalid resonse. Anser should be 'keep' or 'redo'.");
+                    userResponse = Console.ReadLine().ToLower();
+                }
+
+                if (userResponse == "keep") 
+                {
+                    cont = false;
+                }
             }
         }
     }
